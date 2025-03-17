@@ -1,12 +1,13 @@
-const { sprintf } = require('sprintf-js');
-const chalk = require('chalk');
+import { sprintf } from 'sprintf-js';
+import chalk from 'chalk';
+import type { Options, ValidationType } from './types';
 
-function log(body) {
+export function log(body: string) {
   // eslint-disable-next-line no-console
   console.log(body);
 }
 
-function getPrefixErrorMessage(config, branchName) {
+function getPrefixErrorMessage(config: Options, branchName: string) {
   return sprintf(
     config.msgPrefixNotAllowed,
     branchName,
@@ -15,11 +16,11 @@ function getPrefixErrorMessage(config, branchName) {
   );
 }
 
-function getDisallowedErrorMessage(config, branchName) {
+function getDisallowedErrorMessage(config: Options, branchName: string) {
   return sprintf(config.msgBranchDisallowed, branchName);
 }
 
-function getRegexErrorMessage(config, branchName) {
+function getRegexErrorMessage(config: Options, branchName: string) {
   return sprintf(
     config.msgRegexNotMatched,
     branchName,
@@ -27,16 +28,20 @@ function getRegexErrorMessage(config, branchName) {
   );
 }
 
-function getSeparatorErrorMessage(config, branchName) {
+function getSeparatorErrorMessage(config: Options, branchName: string) {
   return sprintf(config.msgSeperatorRequired, branchName, config.separator);
 }
 
-function getSectionsErrorMessage(config, branchName) {
+function getSectionsErrorMessage(config: Options, branchName: string) {
   return sprintf(config.msgSectionsOver, branchName, config.maxSections);
 }
 
 // eslint-disable-next-line max-lines-per-function
-function printErrorMessage(config, type, branchName) {
+export function printErrorMessage(
+  config: Options,
+  type: ValidationType,
+  branchName: string,
+) {
   switch (type) {
     case 'prefix':
       return log(
@@ -67,8 +72,3 @@ function printErrorMessage(config, type, branchName) {
       return '';
   }
 }
-
-export default {
-  log,
-  printErrorMessage,
-};

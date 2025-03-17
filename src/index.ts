@@ -1,10 +1,9 @@
 import yargs from 'yargs';
+import gitBranchIs from 'git-branch-is';
 import { Config } from './config';
 import { Linter } from './linter';
 
-const gitBranchIs = require('git-branch-is');
-
-export default async function cli() {
+async function branchlint() {
   const argv = await yargs
     .usage('Usage: $0')
     .example('$0', 'Lint current branch')
@@ -15,12 +14,13 @@ export default async function cli() {
       type: 'string',
       description: 'Config file path',
       default: null,
-    })
-    .epilog('Copyright Shuhei Hayashibara 2019').argv;
-  const config = new Config({ config: argv.config });
+    }).argv;
+  const config = new Config(argv);
 
-  gitBranchIs.getBranch().then(branchName => {
+  gitBranchIs.getBranch({}).then((branchName: string) => {
     const linter = new Linter(config);
     linter.lint(branchName);
   });
 }
+
+void branchlint();

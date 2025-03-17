@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/branchlint.svg)](https://badge.fury.io/js/branchlint) [![Actions Status](https://github.com/shufo/branchlint/workflows/Build%20and%20Test/badge.svg)](https://github.com/shufo/branchlint/actions)
+[![Actions Status](https://github.com/shufo/branchlint/workflows/Build%20and%20Test/badge.svg)](https://github.com/qonto/branchlint/actions)
 
 # branchlint
 
@@ -9,13 +9,13 @@ A git branch linter to enforce branch naming convention
 npm
 
 ```
-npm install --save-dev branchlint
+npm install --save-dev @qonto/branchlint
 ```
 
 yarn
 
 ```
-yarn add -D branchlint
+yarn add -D @qonto/branchlint
 ```
 
 Add `.branchlintrc` or `.branchlintrc.json` like
@@ -62,7 +62,6 @@ yarn add -D husky
 Add husky configuration to `package.json` or `.huskyrc` to check branch name.
 
 ```json
-~
 "husky": {
   "hooks": {
       "pre-push": "branchlint"
@@ -120,24 +119,6 @@ Add husky configuration to `package.json` or `.huskyrc` to check branch name.
 |                    `msgRegexNotMatched` |The error message when listed regular expressions in `regularExpressions`|
 |`msgSeperatorRequired`|The error message when required separator is not found|
 |`msgSectionsOver`|The error message when section count is bigger than `maxSections`|
-
-
-## Test
-
-Run
-
-```
-yarn test
-```
-
-## Contributing
-
-1.  Fork it
-2.  Create your feature branch (`git checkout -b my-new-feature`)
-3.  Commit your changes (`git commit -am 'Add some feature'`)
-4.  Push to the branch (`git push origin my-new-feature`)
-5.  Create new Pull Request
-
 
 ## LICENSE
 

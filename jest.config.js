@@ -4,5 +4,7 @@ module.exports = {
   globals: {
     __basedir: appRoot.toString(),
   },
-  testMatch: ['**/__tests__/**/?(*.)+(spec|test).[jt]s?(x)'],
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ['**/tests/**/?(*.)+(spec|test).[jt]s?(x)'],
 };

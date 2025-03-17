@@ -38,7 +38,7 @@ describe('Linter', () => {
 
   test('check if branch name includes separator', () => {
     const config = new Config({
-      separator: ['/'],
+      separator: '/',
     });
     const linter = new Linter(config);
 

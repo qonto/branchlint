@@ -1,2 +1,18 @@
-node_modules
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# build target
+dist
+
+# dependencies
+node_modules/
+
+# misc
+.env*
+.idea
+.pnp*
+.pnpm-debug.log
+.sass-cache
+.eslintcache
+coverage/
+npm-debug.log*
 yarn-error.log

@@ -1,19 +1,21 @@
-import util from './util';
-
-const _ = require('lodash');
+import { log, printErrorMessage } from './util';
+import type { Options, Validation } from './types';
+import type { Config } from './config';
 
 export class Linter {
-  constructor(config) {
+  options: Options;
+
+  constructor(config: Config) {
     this.options = config.options;
   }
 
   // eslint-disable-next-line max-lines-per-function
-  lint(branchName) {
+  lint(branchName: string) {
     if (this.isAllowed(branchName)) {
       return true;
     }
 
-    const validations = [
+    const validations: Validation[] = [
       { type: 'prefix', isValid: this.validatePrefix(branchName) },
       { type: 'disallowed', isValid: this.validateDisallowedName(branchName) },
       { type: 'regex', isValid: this.validateRegex(branchName) },
@@ -23,7 +25,7 @@ export class Linter {
 
     this.printErrors(validations, branchName);
 
-    const somethingError = _.some(validations, validation => {
+    const somethingError = validations.some((validation) => {
       return !validation.isValid;
     });
 
@@ -35,75 +37,75 @@ export class Linter {
     return true;
   }
 
-  isAllowed(branchName) {
-    if (_.includes(this.options.allowed, branchName)) {
-      util.log('valid branch name');
+  isAllowed(branchName: string) {
+    if (this.options.allowed.includes(branchName)) {
+      log('valid branch name');
       return true;
     }
 
     return false;
   }
 
-  printErrors(validations, branchName) {
+  printErrors(validations: Validation[], branchName: string) {
     if (!this.options.quiet) {
-      _.each(validations, validation => {
+      validations.forEach((validation) => {
         if (!validation.isValid) {
-          util.printErrorMessage(this.options, validation.type, branchName);
+          printErrorMessage(this.options, validation.type, branchName);
         }
       });
     }
   }
 
-  validatePrefix(branchName) {
+  validatePrefix(branchName: string) {
     const { prefixes, separator } = this.options;
 
     if (prefixes.length === 0) {
       return true;
     }
 
-    return _.some(prefixes, prefix => {
+    return prefixes.some((prefix) => {
       const regex = new RegExp(`^${prefix}${separator}`);
       return branchName.match(regex);
     });
   }
 
-  validateDisallowedName(branchName) {
+  validateDisallowedName(branchName: string) {
     const { disallowed } = this.options;
 
     if (disallowed.length === 0) {
       return true;
     }
 
-    return !_.some(disallowed, name => {
+    return !disallowed.some((name) => {
       const regex = new RegExp(`^${name}$`);
       return branchName.match(regex);
     });
   }
 
-  validateRegex(branchName) {
+  validateRegex(branchName: string) {
     const { regularExpressions } = this.options;
 
     if (regularExpressions.length === 0) {
       return true;
     }
 
-    return _.some(regularExpressions, regularExpression => {
+    return regularExpressions.some((regularExpression) => {
       const regex = new RegExp(regularExpression);
       return branchName.match(regex);
     });
   }
 
-  validateSeparator(branchName) {
+  validateSeparator(branchName: string) {
     const { separator } = this.options;
     if (!separator || separator === '') {
       return true;
     }
 
     const regex = new RegExp(`^.*${separator}.*`);
-    return !_.isNull(branchName.match(regex));
+    return regex.test(branchName);
   }
 
-  validateSections(branchName) {
+  validateSections(branchName: string) {
     const { separator, maxSections } = this.options;
     const splited = branchName.split(separator);
 
@@ -111,14 +113,6 @@ export class Linter {
       return true;
     }
 
-    if (splited.length > maxSections) {
-      return false;
-    }
-
-    return true;
+    return splited.length <= maxSections;
   }
 }
-
-export default {
-  Linter,
-};
